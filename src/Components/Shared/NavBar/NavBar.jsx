@@ -1,22 +1,26 @@
 import { Link, NavLink } from "react-router-dom";
-import { IoIosNotificationsOutline } from "react-icons/io";
-import Hamburger from "hamburger-react";
+import { Sling as Hamburger } from "hamburger-react";
 import { useState } from "react";
+import { scaleRotate as Menu } from "react-burger-menu";
+import useAuth from "../../../Hooks/useAuth/useAuth";
 
 const NavBar = () => {
+  const { user, logoutUser } = useAuth();
   const [isOpen, setOpen] = useState(false);
 
-  const navLink = (
+  // sign out handle -----
+  const handleSignOut = () => {
+    logoutUser();
+  };
+
+  // mene link --
+  const navMenu = (
     <>
       <li>
         <NavLink
           to={"/"}
           className={({ isActive, isPending }) =>
-            isActive
-              ? "font-semibold hover:font-black border-white border-2 "
-              : isPending
-              ? "pending"
-              : "hover:font-black "
+            isActive ? "underline" : isPending ? "pending" : ""
           }
         >
           Home
@@ -26,59 +30,58 @@ const NavBar = () => {
         <NavLink
           to={"/membership"}
           className={({ isActive, isPending }) =>
-            isActive
-              ? " font-semibold hover:font-black border-white border-2 "
-              : isPending
-              ? "pending"
-              : "hover:font-black"
+            isActive ? "underline" : isPending ? "pending" : ""
           }
         >
           Membership
         </NavLink>
       </li>
       <li>
-        <Link>
-          <button className="">
-            <IoIosNotificationsOutline className="inline w-5 h-5" />
-            <div className="badge">0</div>
-          </button>
-        </Link>
+        <Link>Notification</Link>
       </li>
-      <li>
-        <Link to={"/register"}>Join US</Link>
-      </li>
+      {!user ? (
+        <li>
+          <Link to={"/register"}>Join Us</Link>
+        </li>
+      ) : (
+        <li>
+          <Link onClick={handleSignOut}>Sign Out</Link>
+        </li>
+      )}
     </>
   );
-
   return (
-    <div className="navbar bg-slate-950 text-white">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <Hamburger toggled={isOpen} toggle={setOpen} />
-          </label>
-          <ul
-            tabIndex={0}
-            className={`menu ${
-              !isOpen && "hidden"
-            } bg-slate-950  dropdown-content  z-[1] p-2 shadow  w-52 min-h-screen`}
-          >
-            {navLink}
+    <nav className="py-5 px-3 flex bg-slate-900 text-white font-bold justify-between items-center">
+      {/* hum burger icon */}
+      <div className="md:hidden">
+        <Hamburger toggled={isOpen} toggle={setOpen} />
+        <Menu noOverlay>
+          <ul className="min-h-screen bg-slate-900 p-10 space-y-4">
+            {navMenu}
           </ul>
-        </div>
+        </Menu>
+      </div>
+      {/* logo */}
+      <div>
         <img
-          className="h-10 sm:h-12    "
+          className="h-12"
           src="https://i.ibb.co/f0kJTdd/devpoint-logo.png"
-          alt=""
+          alt="dev point logo"
         />
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{navLink}</ul>
+      <div>
+        {/* mobile menu  */}
+
+        {/* menu */}
+        <div>
+          <ul className="hidden md:flex space-x-8 justify-center items-center ">
+            {navMenu}
+          </ul>
+        </div>
       </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
-      </div>
-    </div>
+      {/* profile */}
+      <div></div>
+    </nav>
   );
 };
 
