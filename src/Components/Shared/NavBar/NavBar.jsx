@@ -1,12 +1,14 @@
 import { Link, NavLink } from "react-router-dom";
 import { Sling as Hamburger } from "hamburger-react";
 import { useState } from "react";
-import { scaleRotate as Menu } from "react-burger-menu";
 import useAuth from "../../../Hooks/useAuth/useAuth";
+import { Badge } from "@mui/material";
+import { NotificationsNoneOutlined } from "@mui/icons-material";
 
 const NavBar = () => {
   const { user, logoutUser } = useAuth();
   const [isOpen, setOpen] = useState(false);
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
 
   // sign out handle -----
   const handleSignOut = () => {
@@ -37,7 +39,14 @@ const NavBar = () => {
         </NavLink>
       </li>
       <li>
-        <Link>Notification</Link>
+        <Link>
+          <Badge badgeContent={1} color="primary">
+            <NotificationsNoneOutlined
+              color="action"
+              className="bg-white rounded-sm"
+            />
+          </Badge>
+        </Link>
       </li>
       {!user ? (
         <li>
@@ -51,16 +60,22 @@ const NavBar = () => {
     </>
   );
   return (
-    <nav className="py-5 px-3 flex bg-slate-900 text-white font-bold justify-between items-center">
+    <nav className="py-5 px-3 flex relative bg-slate-900 text-white font-bold justify-between items-center">
       {/* hum burger icon */}
-      <div className="md:hidden">
+      <span className="md:hidden">
         <Hamburger toggled={isOpen} toggle={setOpen} />
-        <Menu noOverlay>
-          <ul className="min-h-screen bg-slate-900 p-10 space-y-4">
-            {navMenu}
-          </ul>
-        </Menu>
+      </span>
+      {/* mobile menu  */}
+      <div
+        className={
+          !isOpen
+            ? "absolute -top-[10000px] "
+            : "absolute left-0 right-0 text-center duration-300 ease-in top-20"
+        }
+      >
+        <ul className=" bg-slate-900 p-10 space-y-4">{navMenu}</ul>
       </div>
+
       {/* logo */}
       <div>
         <img
@@ -70,8 +85,6 @@ const NavBar = () => {
         />
       </div>
       <div>
-        {/* mobile menu  */}
-
         {/* menu */}
         <div>
           <ul className="hidden md:flex space-x-8 justify-center items-center ">
@@ -80,7 +93,33 @@ const NavBar = () => {
         </div>
       </div>
       {/* profile */}
-      <div></div>
+      <div
+        onClick={() => {
+          setIsOpenProfile(!isOpenProfile);
+        }}
+        className="flex justify-center items-center cursor-pointer"
+      >
+        {user && (
+          <div className="avatar">
+            <div className="w-12 rounded-full">
+              <img className="w-full" src={user?.photoURL} />
+            </div>
+          </div>
+        )}
+      </div>
+      <div
+        className={
+          isOpenProfile
+            ? "absolute bg-slate-900 p-10 top-20 right-0 left-0 text-center space-y-5 duration-1000 transition "
+            : "hidden"
+        }
+      >
+        <p className="text-slate-300 my-5">{user?.displayName}</p>
+        <Link to={"/dashboard"} className="font-bold">
+          Dashboard
+        </Link>
+        <button className="btn block mx-auto font-semibold">Sign Out</button>
+      </div>
     </nav>
   );
 };

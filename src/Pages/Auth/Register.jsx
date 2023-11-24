@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth/useAuth";
 
 const Register = () => {
-  const { createUser } = useAuth();
+  const { createUser, updateUserProfile } = useAuth();
   const {
     register,
     handleSubmit,
@@ -15,6 +15,9 @@ const Register = () => {
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        updateUserProfile(data.name, data.photo).then(() => {
+          console.log("user created");
+        });
       })
       .catch((err) => {
         console.log(err.message);
@@ -23,7 +26,7 @@ const Register = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center mt-6 px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center mt-6 px-6 py-2 md:py-8 mx-auto md:h-screen">
         <Link
           to={"/"}
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
@@ -52,14 +55,16 @@ const Register = () => {
                   Name <span className="text-red-700">*</span>
                 </label>
                 <input
-                  {...register("name")}
+                  {...register("name", { required: true })}
                   type="text"
                   name="name"
                   id="name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write Your Full Name"
-                  required
                 />
+                {errors.name?.type === "required" && (
+                  <p className="text-sm text-red-600">Name is Required!</p>
+                )}
               </div>
               {/* email */}
               <div>
@@ -70,14 +75,16 @@ const Register = () => {
                   Email <span className="text-red-700">*</span>
                 </label>
                 <input
-                  {...register("email")}
+                  {...register("email", { required: true })}
                   type="email"
                   name="email"
                   id="email"
                   placeholder="Write Your Email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
                 />
+                {errors.email?.type === "required" && (
+                  <p className="text-sm text-red-600">Email is Required!</p>
+                )}
               </div>
               {/* password */}
               <div>
@@ -88,14 +95,33 @@ const Register = () => {
                   Password <span className="text-red-700">*</span>
                 </label>
                 <input
-                  {...register("password")}
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    pattern:
+                      /(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/,
+                  })}
                   type="password"
                   name="password"
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
                 />
+                {errors.password?.type === "required" && (
+                  <p className="text-sm text-red-600">Password is Required!</p>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <p className="text-sm text-red-600">
+                    Password must be 6 characters
+                  </p>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <p className="text-sm text-red-600">
+                    Password must have at least one uppercase <b>[A-Z]</b>{" "}
+                    letter, one lowercase <b>[a-z]</b> letter, one number{" "}
+                    <b>[0-9]</b> and one special[!@#$] character.
+                  </p>
+                )}
               </div>
               {/* photo */}
               <div>
@@ -106,26 +132,27 @@ const Register = () => {
                   Photo
                 </label>
                 <input
-                  {...register("photo")}
+                  {...register("photo", { required: true })}
                   type="text"
                   name="photo"
                   id="photo"
-                  placeholder=""
+                  placeholder="Put Your Photo URL"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
                 />
+                {errors.photo?.type === "required" && (
+                  <p className="text-sm text-red-600">Photo is Required!</p>
+                )}
               </div>
 
               {/* terms  */}
               <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input
-                    {...register("terms")}
+                    {...register("terms", { required: true })}
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    required
                   />
                 </div>
                 <div className="ml-3 text-sm">
@@ -141,6 +168,9 @@ const Register = () => {
                       Terms and Conditions
                     </a>
                   </label>
+                  {errors.terms?.type === "required" && (
+                    <p className="text-sm text-red-600">Terms is Required!</p>
+                  )}
                 </div>
               </div>
               <input
