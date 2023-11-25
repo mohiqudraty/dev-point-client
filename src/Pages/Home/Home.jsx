@@ -1,21 +1,27 @@
-import useAxiosPublic from "../../Hooks/useAxios/useAxiosPublic";
+import { Button } from "@mui/material";
+import usePost from "../../Api/usePost";
+import Banner from "./Banner/Banner";
 import Post from "./Post/Post";
-import { useEffect, useState } from "react";
 
 const Home = () => {
-  const axiosPublic = useAxiosPublic();
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    axiosPublic.get("/all-post").then((res) => {
-      console.log(res.data);
-      setPosts(res.data);
-    });
-  }, [axiosPublic]);
+  const { posts } = usePost();
   return (
     <div>
-      {posts?.map((post, i) => (
-        <Post key={i} post={post}></Post>
-      ))}
+      {/* banner with search input */}
+      <Banner></Banner>
+      {/* all post section */}
+      <div>
+        {posts?.map((post, i) => (
+          <Post key={i} post={post}></Post>
+        ))}
+      </div>
+      {/* tag section */}
+      <div className="max-w-3xl mx-auto">
+        <h3 className="text-center my-6 font-bold">All Tags</h3>
+        {posts.map((post, index) => (
+          <Button key={index}>#{post?.tag}</Button>
+        ))}
+      </div>
     </div>
   );
 };

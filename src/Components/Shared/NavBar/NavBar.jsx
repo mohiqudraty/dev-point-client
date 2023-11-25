@@ -4,9 +4,11 @@ import { useState } from "react";
 import useAuth from "../../../Hooks/useAuth/useAuth";
 import { Badge } from "@mui/material";
 import { NotificationsNoneOutlined } from "@mui/icons-material";
+import useAnnouncement from "../../../Api/useAnnouncement";
 
 const NavBar = () => {
   const { user, logoutUser } = useAuth();
+  const { announcement } = useAnnouncement();
   const [isOpen, setOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
 
@@ -40,7 +42,7 @@ const NavBar = () => {
       </li>
       <li>
         <Link>
-          <Badge badgeContent={1} color="primary">
+          <Badge badgeContent={announcement?.length} color="primary">
             <NotificationsNoneOutlined
               color="action"
               className="bg-white rounded-sm"
