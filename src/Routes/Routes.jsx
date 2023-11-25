@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import Register from "../Pages/Auth/Register";
 import Login from "../Pages/Auth/Login";
 import Membership from "../Pages/Membership/Membership";
+import PrivetRoute from "./PrivetRoute";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/membership",
-        element: <Membership></Membership>,
+        element: (
+          <PrivetRoute>
+            <Membership></Membership>
+          </PrivetRoute>
+        ),
       },
     ],
   },

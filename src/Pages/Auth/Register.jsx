@@ -1,9 +1,21 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth/useAuth";
+import { FaGoogle } from "react-icons/fa";
 
 const Register = () => {
-  const { createUser, updateUserProfile } = useAuth();
+  const { createUser, updateUserProfile, googleSignIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleGoogle = () => {
+    googleSignIn()
+      .then((res) => {
+        console.log(res.user);
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
+  };
+
   const {
     register,
     handleSubmit,
@@ -17,6 +29,7 @@ const Register = () => {
         console.log(result.user);
         updateUserProfile(data.name, data.photo).then(() => {
           console.log("user created");
+          navigate("/");
         });
       })
       .catch((err) => {
@@ -178,6 +191,14 @@ const Register = () => {
                 className="w-full cursor-pointer text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                 value={"Create an account"}
               />
+
+              <button
+                onClick={handleGoogle}
+                type="button"
+                className="w-full btn-outline btn cursor-pointer text-gray-900 hover:text-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm  mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              >
+                <FaGoogle /> Register With Google
+              </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link

@@ -60,7 +60,7 @@ const NavBar = () => {
     </>
   );
   return (
-    <nav className="py-5 px-3 flex relative bg-slate-900 text-white font-bold justify-between items-center">
+    <nav className="py-2 md:py-5 px-3 flex relative bg-slate-900 text-white font-bold justify-between items-center">
       {/* hum burger icon */}
       <span className="md:hidden">
         <Hamburger toggled={isOpen} toggle={setOpen} />
@@ -77,7 +77,7 @@ const NavBar = () => {
       </div>
 
       {/* logo */}
-      <div>
+      <div className="mx-auto md:mx-0">
         <img
           className="h-12"
           src="https://i.ibb.co/f0kJTdd/devpoint-logo.png"
