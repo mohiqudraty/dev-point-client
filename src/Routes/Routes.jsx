@@ -5,6 +5,7 @@ import Register from "../Pages/Auth/Register";
 import Login from "../Pages/Auth/Login";
 import Membership from "../Pages/Membership/Membership";
 import PrivetRoute from "./PrivetRoute";
+import PostDetails from "../Pages/Home/Post/PostDetails";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
         element: (
           <PrivetRoute>
             <Membership></Membership>
+          </PrivetRoute>
+        ),
+      },
+      {
+        path: "/post/:id",
+        element: (
+          <PrivetRoute>
+            <PostDetails></PostDetails>
           </PrivetRoute>
         ),
       },

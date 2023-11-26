@@ -72,7 +72,7 @@ const NavBar = () => {
         className={
           !isOpen
             ? "absolute -top-[10000px] "
-            : "absolute left-0 right-0 text-center duration-300 ease-in top-20"
+            : "absolute z-40 left-0 right-0 text-center duration-300 ease-in top-20"
         }
       >
         <ul className=" bg-slate-900 p-10 space-y-4">{navMenu}</ul>
@@ -112,7 +112,7 @@ const NavBar = () => {
       <div
         className={
           isOpenProfile
-            ? "absolute bg-slate-900 p-10 top-20 right-0 left-0 text-center space-y-5 duration-1000 transition "
+            ? "absolute z-50 bg-slate-900 p-10 top-20 right-0 left-0 text-center space-y-5 duration-1000 transition "
             : "hidden"
         }
       >

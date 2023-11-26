@@ -3,6 +3,7 @@ import useAxiosPublic from "../Hooks/useAxios/useAxiosPublic";
 
 const usePost = () => {
   const axiosPublic = useAxiosPublic();
+  // all post api
   const { data: posts = [] } = useQuery({
     queryKey: ["all-post"],
     queryFn: async () => {
@@ -10,6 +11,7 @@ const usePost = () => {
       return res.data;
     },
   });
+
   return { posts };
 };
 

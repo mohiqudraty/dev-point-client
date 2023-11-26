@@ -1,9 +1,23 @@
 /* eslint-disable no-unused-vars */
-import moment from "moment/moment";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { BiComment, BiDownvote, BiShare, BiUpvote } from "react-icons/bi";
-import { Link } from "react-router-dom";
-const Post = ({ post }) => {
-  //   console.log(Object.keys(post).join(","));
+import { useParams } from "react-router-dom";
+import useAxiosPublic from "../../../Hooks/useAxios/useAxiosPublic";
+
+const PostDetails = () => {
+  const axiosPublic = useAxiosPublic();
+  const [post, setPost] = useState({});
+  const { id } = useParams();
+  console.log(id);
+
+  useEffect(() => {
+    axiosPublic.get(`single-post/${id}`).then((res) => {
+      setPost(res.data);
+      console.log(res.data);
+    });
+  }, [id, axiosPublic]);
+
   const {
     _id,
     authorImage,
@@ -17,7 +31,6 @@ const Post = ({ post }) => {
     downVote,
   } = post || {};
   const formattedDate = moment(postedTime).format("MMMM Do YYYY, h:mm:ss a");
-
   return (
     <section>
       <div className="max-w-4xl mx-auto px-10 my-4 py-6 bg-white rounded-lg shadow-md">
@@ -41,12 +54,12 @@ const Post = ({ post }) => {
             {tag}
           </a>
         </div>
-        <Link to={`post/${_id}`} className="mt-2">
+        <div className="mt-2">
           <h3 className="text-2xl text-gray-700 font-bold cursor-pointer hover:text-gray-600">
             {postTitle}
           </h3>
-          {/* <p className="mt-2 text-gray-600">{postDescription}</p> */}
-        </Link>
+          <p className="mt-2 text-gray-600">{postDescription}</p>
+        </div>
         <div className="flex justify-between items-center mt-4">
           <div className="flex items-center justify-center gap-5">
             <button>
@@ -67,4 +80,4 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+export default PostDetails;
