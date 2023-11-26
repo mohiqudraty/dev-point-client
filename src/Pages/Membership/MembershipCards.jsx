@@ -2,7 +2,7 @@ import { MdOutlineDoneOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const MembershipCards = ({ p }) => {
-  console.log(Object.keys(p).join(","));
+  // console.log(Object.keys(p).join(","));
   const { type, img, price, features } = p;
   return (
     <div className="w-full md:w-80 flex flex-col justify-center items-center space-y-5 mt-10 md:mt-4">
@@ -19,8 +19,9 @@ const MembershipCards = ({ p }) => {
           </p>
         ))}
       </div>
+
       <Link className="btn bg-slate-800 font-semibold text-white btn-block hover:text-black">
-        Buy Plan
+        {type === "Silver" ? "Plan Active" : "Buy Plan"}
       </Link>
     </div>
   );

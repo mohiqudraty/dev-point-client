@@ -49,6 +49,8 @@ const Home = () => {
           <Button key={index}>#{post?.tag}</Button>
         ))}
       </div>
+      {/* announcement section  */}
+      <div></div>
     </div>
   );
 };

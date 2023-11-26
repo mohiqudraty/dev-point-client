@@ -3,7 +3,6 @@ import moment from "moment/moment";
 import { BiComment, BiDownvote, BiShare, BiUpvote } from "react-icons/bi";
 import { Link } from "react-router-dom";
 const Post = ({ post }) => {
-  //   console.log(Object.keys(post).join(","));
   const {
     _id,
     authorImage,
@@ -16,11 +15,14 @@ const Post = ({ post }) => {
     upVote,
     downVote,
   } = post || {};
-  const formattedDate = moment(postedTime).format("MMMM Do YYYY, h:mm:ss a");
+
+  const formattedDate = moment(postedTime, "YYYY-MM-DDTHH:mm:ssZ").format(
+    "MMMM Do YYYY, h:mm:ss a"
+  );
 
   return (
-    <section>
-      <div className="max-w-4xl mx-auto px-10 my-4 py-6 bg-white rounded-lg shadow-md">
+    <section className="my-5">
+      <div className="max-w-4xl mx-auto px-10 my-4 py-6 bg-slate-300 hover:border-2 border-slate-900 duration-500 ease-in rounded-lg shadow-md">
         <div className="flex justify-between items-center">
           <div>
             <a className="flex items-center">
