@@ -4,12 +4,29 @@ import { useEffect, useState } from "react";
 import { BiComment, BiDownvote, BiShare, BiUpvote } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import useAxiosPublic from "../../../Hooks/useAxios/useAxiosPublic";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+  EmailShareButton,
+  EmailIcon,
+} from "react-share";
+import toast from "react-hot-toast";
 
 const PostDetails = () => {
   const axiosPublic = useAxiosPublic();
   const [post, setPost] = useState({});
   const { id } = useParams();
   console.log(id);
+
+  const shareUrl = `http://localhost:5173/post/${id}`;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareUrl);
+    toast.success(`Link copied!`);
+  };
 
   useEffect(() => {
     axiosPublic.get(`single-post/${id}`).then((res) => {
@@ -72,7 +89,48 @@ const PostDetails = () => {
             </button>
 
             <BiComment className="cursor-pointer inline" />
-            <BiShare className="cursor-pointer inline" />
+
+            {/* The button to open modal */}
+            <label htmlFor="my_modal_7" className="btn">
+              <BiShare className="cursor-pointer inline" />
+            </label>
+
+            {/* Put this part before </body> tag */}
+            <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+            <div className="modal" role="dialog">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Share With Friends</h3>
+                <div className="flex gap-5 my-3">
+                  {/* Facebook Share Button */}
+                  <FacebookShareButton url={shareUrl} quote={postTitle}>
+                    <FacebookIcon size={32} round />
+                  </FacebookShareButton>
+
+                  {/* Twitter Share Button */}
+                  <TwitterShareButton url={shareUrl} title={postTitle}>
+                    <TwitterIcon size={32} round />
+                  </TwitterShareButton>
+
+                  {/* WhatsApp Share Button */}
+                  <WhatsappShareButton url={shareUrl} title={postTitle}>
+                    <WhatsappIcon size={32} round />
+                  </WhatsappShareButton>
+
+                  {/* Email Share Button */}
+                  <EmailShareButton url={shareUrl} subject={postTitle}>
+                    <EmailIcon size={32} round />
+                  </EmailShareButton>
+
+                  {/* Button to Copy Link */}
+                  <button className="btn" onClick={handleCopy}>
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+              <label className="modal-backdrop" htmlFor="my_modal_7">
+                Close
+              </label>
+            </div>
           </div>
         </div>
       </div>
