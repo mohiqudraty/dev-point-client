@@ -1,8 +1,18 @@
 /* eslint-disable no-unused-vars */
 import moment from "moment/moment";
-import { BiComment, BiDownvote, BiShare, BiUpvote } from "react-icons/bi";
+import { useState } from "react";
+import { BiComment, BiDownvote, BiUpvote } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import useAxiosPublic from "../../../Hooks/useAxios/useAxiosPublic";
+import toast from "react-hot-toast";
 const Post = ({ post }) => {
+  const axiosPublic = useAxiosPublic();
+  const [upVote, setUpVote] = useState(post.upVote);
+  const [downVote, setDownVote] = useState(post.downVote);
+  const [isUpVoted, setIsUpVoted] = useState(false);
+  const [isDownVoted, setIsDownVoted] = useState(false);
+
+
   const {
     _id,
     authorImage,
@@ -12,13 +22,40 @@ const Post = ({ post }) => {
     postDescription,
     tag,
     postedTime,
-    upVote,
-    downVote,
+    // upVote,
+    // downVote,
   } = post || {};
 
   const formattedDate = moment(postedTime, "YYYY-MM-DDTHH:mm:ssZ").format(
     "MMMM Do YYYY, h:mm:ss a"
   );
+
+  const handleUpVote = async () => {
+    try {
+      const response = await axiosPublic.put(`/posts/${_id}/upvote`);
+      console.log(response.data);
+      if (response.data.modifiedCount > 0) {
+        setUpVote(upVote + 1);
+        toast.success("You Take a Up Vote");
+        setIsUpVoted(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDownVote = async () => {
+    try {
+      const response = await axiosPublic.put(`/posts/${_id}/downvote`);
+      console.log(response.data);
+      if (response.data.modifiedCount > 0) {
+        setDownVote(downVote + 1);
+        toast.success("You Take a Down Vote");
+        setIsDownVoted(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section className="my-5">
@@ -51,17 +88,33 @@ const Post = ({ post }) => {
         </Link>
         <div className="flex justify-between items-center mt-4">
           <div className="flex items-center justify-center gap-5">
-            <button>
-              <BiUpvote className="cursor-pointer inline" />
+            <button
+              className={
+                isUpVoted ? "btn-disabled bg-blue-400 rounded-md p-1" : ""
+              }
+            >
+              <BiUpvote
+                onClick={handleUpVote}
+                className="cursor-pointer inline"
+              />
               {upVote}
             </button>
-            <button>
-              <BiDownvote className="cursor-pointer inline" />
+            <button
+              className={
+                isDownVoted ? "btn-disabled bg-slate-600 rounded-md p-1" : ""
+              }
+            >
+              <BiDownvote
+                onClick={handleDownVote}
+                className="cursor-pointer inline"
+              />
               {downVote}
             </button>
 
-            <BiComment className="cursor-pointer inline" />
-            <BiShare className="cursor-pointer inline" />
+            <Link to={`post/${_id}`}>
+              {" "}
+              <BiComment className="cursor-pointer inline" />
+            </Link>
           </div>
         </div>
       </div>

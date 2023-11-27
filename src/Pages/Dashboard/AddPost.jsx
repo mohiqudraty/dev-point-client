@@ -54,8 +54,8 @@ const AddPost = () => {
     const authorImage = form.authorImage.value;
     const postDescription = form.postDescription.value;
     const tag = selectedOption.value;
-    const upVote = form.upVote.value;
-    const downVote = form.downVote.value;
+    const upVote = parseInt(form.upVote.value);
+    const downVote = parseInt(form.downVote.value);
 
     const post = {
       authorImage,

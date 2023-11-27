@@ -80,11 +80,13 @@ const NavBar = () => {
 
       {/* logo */}
       <div className="mx-auto md:mx-0">
-        <img
-          className="h-12"
-          src="https://i.ibb.co/f0kJTdd/devpoint-logo.png"
-          alt="dev point logo"
-        />
+        <Link to={"/"}>
+          <img
+            className="h-12"
+            src="https://i.ibb.co/f0kJTdd/devpoint-logo.png"
+            alt="dev point logo"
+          />
+        </Link>
       </div>
       <div>
         {/* menu */}
