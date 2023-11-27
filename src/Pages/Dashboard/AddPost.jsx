@@ -1,6 +1,8 @@
 import { useState } from "react";
 import useAuth from "../../Hooks/useAuth/useAuth";
 import Select from "react-select";
+import useAxiosPublic from "../../Hooks/useAxios/useAxiosPublic";
+import toast from "react-hot-toast";
 const options = [
   { value: "Security", label: "Security" },
   { value: "Bootstrap", label: "Bootstrap" },
@@ -39,13 +41,47 @@ const options = [
 // JavaScript
 
 const AddPost = () => {
+  const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
   const [selectedOption, setSelectedOption] = useState(null);
+  const postedTime = new Date();
+  const handleAddPost = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const authorName = form.authorName.value;
+    const authorEmail = form.authorEmail.value;
+    const postTitle = form.postTitle.value;
+    const authorImage = form.authorImage.value;
+    const postDescription = form.postDescription.value;
+    const tag = selectedOption.value;
+    const upVote = form.upVote.value;
+    const downVote = form.downVote.value;
+
+    const post = {
+      authorImage,
+      authorName,
+      authorEmail,
+      postTitle,
+      postDescription,
+      tag,
+      postedTime,
+      upVote,
+      downVote,
+    };
+    console.log(post);
+    axiosPublic.post("add-post", post).then((res) => {
+      console.log(res.data);
+      if (res.data.insertedId) {
+        toast.success("New Post Published");
+        form.reset();
+      }
+    });
+  };
 
   return (
     <div className="pt-10">
       <h2 className="text-3xl font-semibold text-center my-10">Add Post</h2>
-      <form className="max-w-[90%] p-3 mx-auto">
+      <form onSubmit={handleAddPost} className="max-w-[90%] p-3 mx-auto">
         {/* author name and email  */}
         <div className="flex flex-col md:flex-row md:gap-8 justify-center">
           {/* name  */}
@@ -59,7 +95,7 @@ const AddPost = () => {
             <input
               defaultValue={user && user.displayName}
               readOnly
-              name="name"
+              name="authorName"
               type="text"
               id="name"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
@@ -78,7 +114,7 @@ const AddPost = () => {
             <input
               defaultValue={user && user.email}
               readOnly
-              name="email"
+              name="authorEmail"
               type="email"
               id="email"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
@@ -98,7 +134,7 @@ const AddPost = () => {
               Title
             </label>
             <input
-              name="title"
+              name="postTitle"
               type="text"
               id="title"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
@@ -117,7 +153,7 @@ const AddPost = () => {
             <input
               defaultValue={user && user.photoURL}
               readOnly
-              name="image"
+              name="authorImage"
               type="text"
               id="image"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
@@ -137,7 +173,7 @@ const AddPost = () => {
               Description
             </label>
             <textarea
-              name="description"
+              name="postDescription"
               type="text"
               id="description"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
@@ -157,6 +193,7 @@ const AddPost = () => {
               defaultValue={selectedOption}
               onChange={setSelectedOption}
               options={options}
+              required
             />
           </div>
         </div>
