@@ -8,7 +8,7 @@ const MyProfile = () => {
   const {user} = useAuth()
   const axiosPublic = useAxiosPublic()
   const [myInfo, setMyInfo] = useState({})
-const myPost = useMyPost()
+const {myPost} = useMyPost()
 // console.log(myPost);
  
 

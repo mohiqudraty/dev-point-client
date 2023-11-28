@@ -47,7 +47,7 @@ const AddPost = () => {
   const { user } = useAuth();
   const [selectedOption, setSelectedOption] = useState(null);
   const [myInfo, setMyInfo] = useState({})
-const myPost = useMyPost()
+const {myPost} = useMyPost()
 const navigate = useNavigate()
 
   const postedTime = new Date();

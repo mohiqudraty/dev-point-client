@@ -35,7 +35,7 @@ const Post = ({ post }) => {
   useEffect(() => {
     axiosPublic.get(`comments?postId=${_id}`)
     .then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       setComments(res.data)
     })
   } ,[axiosPublic,_id])

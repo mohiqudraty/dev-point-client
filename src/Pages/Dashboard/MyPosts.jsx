@@ -2,7 +2,7 @@ import useMyPost from "../../Api/useMyPost";
 import MyAllPostCard from "./MyAllPostCard";
 
 const MyPosts = () => {
-  const myPost = useMyPost()
+  const {myPost} = useMyPost()
   return <div>
     <div className="overflow-x-auto">
       <h2 className="text-center text-slate-900 font-semibold text-xl mt-10">My All Post</h2>

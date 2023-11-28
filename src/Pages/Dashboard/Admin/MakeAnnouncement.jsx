@@ -25,8 +25,8 @@ const MakeAnnouncement = () => {
     const announcement = {
       authorImage,
       authorName,
-      postTitle,
-      postDescription,
+      title: postTitle,
+      description: postDescription,
       postedTime,
  
     };

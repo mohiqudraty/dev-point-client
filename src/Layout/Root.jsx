@@ -6,19 +6,17 @@ import Footer from "../Components/Shared/Footer/Footer";
 
 const Root = () => {
   const { loading } = useAuth();
+  if(loading){
+    return <Loader></Loader>
+  }
   return (
     <div>
-      {loading ? (
-        <Loader></Loader>
-      ) : (
-        <>
           <NavBar></NavBar>
           <div className="min-h-[calc(100vh-350px)]">
             <Outlet></Outlet>
           </div>
           <Footer></Footer>
-        </>
-      )}
+      
     </div>
   );
 };

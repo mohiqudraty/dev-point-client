@@ -4,14 +4,17 @@ import { FaGoogle } from "react-icons/fa";
 import useAuth from "../../Hooks/useAuth/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const { googleSignIn, loginUser } = useAuth();
+  const { googleSignIn, loginUser, setLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
   const handleGoogle = () => {
+    setLoading(true);
+  
     googleSignIn()
       .then((res) => {
         console.log(res.user);
@@ -22,7 +25,6 @@ const Login = () => {
               animate__animated
               animate__fadeInUp
               animate__faster
-
             `,
           },
           hideClass: {
@@ -35,7 +37,13 @@ const Login = () => {
         });
         navigate(from, { replace: true });
       })
-      .then((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error(`Failed to log in with Google. ${err}`);
+      })
+      .finally(() => {
+        setLoading(false); 
+      });
   };
 
   const {

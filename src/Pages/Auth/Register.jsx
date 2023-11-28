@@ -19,26 +19,33 @@ const Register = () => {
           name: res.user?.displayName,
           email: res.user?.email,
           role: 'member',
-        }
-        axiosPublic.post('users',user)
-        .then(res => {
-          console.log(res.data);
-          if(res.data.insertedId){
-            Swal.fire({
-              title: "Registration Successful",
-              text: "You Got Silver Badge!",
-              imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
-              imageWidth: 200,
-              imageHeight: 200,
-              imageAlt: "Badge"
-            });
-            navigate("/");
-            setLoading(false)
-          }
-        })
-        
+        };
+  
+        axiosPublic.post('users', user)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.insertedId) {
+              Swal.fire({
+                title: "Registration Successful",
+                text: "You Got Silver Badge!",
+                imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
+                imageWidth: 200,
+                imageHeight: 200,
+                imageAlt: "Badge"
+              });
+              navigate("/");
+              setLoading(false);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            toast.error(`Failed to register: ${error.message}`);
+          });
       })
-      .catch(() => toast.error(`User Already Exist Please Login`));
+      .catch((err) => {
+        console.error(err);
+        toast.error(`Failed to sign in with Google: ${err.message}`);
+      });
   };
 
   const {
@@ -49,38 +56,45 @@ const Register = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    setLoading(true);
+  
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
         updateUserProfile(data.name, data.photo).then(() => {
           console.log("user created");
-const user = {
-  name: data.name,
-  email: data.email,
-  role: 'member',
-}
-
-          axiosPublic.post('users',user)
-          .then(res => {
-            console.log(res.data);
-            if(res.data.insertedId){
-              Swal.fire({
-                title: "Registration Successful",
-                text: "You Got Silver Badge!",
-                imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
-                imageWidth: 200,
-                imageHeight: 200,
-                imageAlt: "Badge"
-              });
-              navigate("/");
-            }
-          })
-
-          
+          const user = {
+            name: data.name,
+            email: data.email,
+            role: 'member',
+          };
+  
+          axiosPublic.post('users', user)
+            .then(res => {
+              console.log(res.data);
+              if (res.data.insertedId) {
+                Swal.fire({
+                  title: "Registration Successful",
+                  text: "You Got Silver Badge!",
+                  imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
+                  imageWidth: 200,
+                  imageHeight: 200,
+                  imageAlt: "Badge"
+                });
+                navigate("/");
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            })
+            .finally(() => {
+              setLoading(false); // Reset loading state whether success or failure
+            });
         });
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error(err.message);
+        setLoading(false); // Reset loading state in case of an error
       });
   };
 

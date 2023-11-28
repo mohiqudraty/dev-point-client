@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
 import useAuth from "../Hooks/useAuth/useAuth";
 import useAxiosPublic from "../Hooks/useAxios/useAxiosPublic";
 
-
 const useMyPost = () => {
-    const [myPost, setMyPost] = useState([])
+    
     const {user} = useAuth()
     const axiosPublic = useAxiosPublic()
-    useEffect(() => {
-        axiosPublic.get(`my-posts?email=${user?.email}`)
-        .then(res => {
-          console.log(res.data);
-          setMyPost(res.data)
-        })
-      },[axiosPublic, user?.email])
-      return myPost
+
+    const { data: myPost = [], refetch } = useQuery({
+      queryKey: ["all-post"],
+      queryFn: async () => {
+        const res = await axiosPublic.get(`my-posts?email=${user?.email}`);
+        return res.data;
+      },
+    });
+
+     
+      return {myPost, refetch}
 };
 
 export default useMyPost;
