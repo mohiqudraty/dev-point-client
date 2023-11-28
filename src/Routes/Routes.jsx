@@ -10,6 +10,10 @@ import PostDetails from "../Pages/Home/Post/PostDetails";
 import MyProfile from "../Pages/Dashboard/MyProfile";
 import AddPost from "../Pages/Dashboard/AddPost";
 import MyPosts from "../Pages/Dashboard/MyPosts";
+import AllUser from "../Pages/Dashboard/AllUser";
+import AllComment from "../Pages/Dashboard/AllComment";
+import AdminProfile from "../Pages/Dashboard/Admin/AdminProfile";
+import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +65,22 @@ const router = createBrowserRouter([
       {
         path:'/dashboard/my-posts',
         element: <MyPosts></MyPosts>
+      },
+      {
+        path:'/dashboard/all-user',
+        element: <AllUser></AllUser>
+      },
+      {
+        path:'/dashboard/comments/:id',
+        element: <AllComment></AllComment>
+      },
+      {
+        path:'/dashboard/admin-profile',
+        element: <AdminProfile></AdminProfile>
+      },
+      {
+        path:'/dashboard/manage-users',
+        element: <ManageUsers></ManageUsers>
       }
     ]
   },

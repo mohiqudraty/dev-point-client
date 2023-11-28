@@ -2,18 +2,43 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth/useAuth";
 import { FaGoogle } from "react-icons/fa";
+import useAxiosPublic from "../../Hooks/useAxios/useAxiosPublic";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Register = () => {
-  const { createUser, updateUserProfile, googleSignIn } = useAuth();
+  const axiosPublic = useAxiosPublic()
+  const { createUser, updateUserProfile, googleSignIn, setLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleGoogle = () => {
     googleSignIn()
       .then((res) => {
         console.log(res.user);
-        navigate("/");
+        const user = {
+          name: res.user?.displayName,
+          email: res.user?.email,
+          role: 'member',
+        }
+        axiosPublic.post('users',user)
+        .then(res => {
+          console.log(res.data);
+          if(res.data.insertedId){
+            Swal.fire({
+              title: "Registration Successful",
+              text: "You Got Silver Badge!",
+              imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
+              imageWidth: 200,
+              imageHeight: 200,
+              imageAlt: "Badge"
+            });
+            navigate("/");
+            setLoading(false)
+          }
+        })
+        
       })
-      .catch((err) => console.log(err));
+      .catch(() => toast.error(`User Already Exist Please Login`));
   };
 
   const {
@@ -29,7 +54,29 @@ const Register = () => {
         console.log(result.user);
         updateUserProfile(data.name, data.photo).then(() => {
           console.log("user created");
-          navigate("/");
+const user = {
+  name: data.name,
+  email: data.email,
+  role: 'member',
+}
+
+          axiosPublic.post('users',user)
+          .then(res => {
+            console.log(res.data);
+            if(res.data.insertedId){
+              Swal.fire({
+                title: "Registration Successful",
+                text: "You Got Silver Badge!",
+                imageUrl: "https://i.ibb.co/LNyvr2t/silver-medal-7645294.png",
+                imageWidth: 200,
+                imageHeight: 200,
+                imageAlt: "Badge"
+              });
+              navigate("/");
+            }
+          })
+
+          
         });
       })
       .catch((err) => {

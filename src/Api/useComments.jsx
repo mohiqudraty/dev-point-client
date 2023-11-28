@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxios/useAxiosSecure";
 
-const usePost = () => {
+const useComments = () => {
   const axiosSecure = useAxiosSecure()
   // all post api
-  const { data: posts = [] } = useQuery({
-    queryKey: ["all-post"],
+  const { data: comments = [] } = useQuery({
+    queryKey: ["comments"],
     queryFn: async () => {
-      const res = await axiosSecure.get("all-post");
+      const res = await axiosSecure.get("comments");
       return res.data;
     },
   });
 
-  return { posts };
+  return { comments };
 };
 
-export default usePost;
+export default useComments;

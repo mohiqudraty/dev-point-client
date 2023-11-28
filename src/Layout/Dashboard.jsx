@@ -1,23 +1,78 @@
+import { useEffect, useState } from "react";
 import { BiHome, BiPen, BiUserCircle } from "react-icons/bi";
+import { FaUser,  } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
+import useAxiosPublic from "../Hooks/useAxios/useAxiosPublic";
+import useAuth from "../Hooks/useAuth/useAuth";
 
 const Dashboard = () => {
+  const {user} = useAuth()
+  const axiosPublic = useAxiosPublic()
+  const [myInfo, setMyInfo] = useState({})
+
+
+
+
+
+  // profile info ------
+  useEffect(() => {
+    axiosPublic.get(`users?email=${user?.email}`)
+    .then(res => {
+      // console.log(res.data);
+      setMyInfo(res.data)
+    })
+  },[axiosPublic, user?.email])
+
+
+  // B. Manage Users
+  // C. Reported Comments/Activities
+  // D. Make Announcement
+
   const navMenu = (
     <>
-      <li>
+      {
+        myInfo.role === 'admin' ? <>
+         <li>
         <NavLink
-          to={"/dashboard/my-profile"}
+          to={"/dashboard/admin-profile"}
           className={({ isActive, isPending }) =>
             isActive ? "underline" : isPending ? "pending" : ""
           }
         >
-          <span className="flex  items-center gap-2">
-            {" "}
-            <BiUserCircle></BiUserCircle> My Profile
+          <span className="flex items-center gap-2">
+            <FaUser></FaUser> Admin Profile
           </span>
         </NavLink>
       </li>
+         <li>
+        <NavLink
+          to={"/dashboard/manage-users"}
+          className={({ isActive, isPending }) =>
+            isActive ? "underline" : isPending ? "pending" : ""
+          }
+        >
+          <span className="flex items-center gap-2">
+            <FaUser></FaUser> Manage Users
+          </span>
+        </NavLink>
+      </li>
+        </> :
+         <li>
+         <NavLink
+           to={"/dashboard/my-profile"}
+           className={({ isActive, isPending }) =>
+             isActive ? "underline" : isPending ? "pending" : ""
+           }
+         >
+           <span className="flex  items-center gap-2">
+             {" "}
+             <BiUserCircle></BiUserCircle> My Profile
+           </span>
+         </NavLink>
+       </li>
+      }
+     
       <li>
         <NavLink
           to={"/dashboard/add-post"}
@@ -43,6 +98,8 @@ const Dashboard = () => {
           </span>
         </NavLink>
       </li>
+     
+    
     </>
   );
   return (

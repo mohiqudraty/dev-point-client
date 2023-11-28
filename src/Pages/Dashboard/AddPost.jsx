@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../Hooks/useAuth/useAuth";
 import Select from "react-select";
 import useAxiosPublic from "../../Hooks/useAxios/useAxiosPublic";
 import toast from "react-hot-toast";
+import useMyPost from "../../Api/useMyPost";
+import { useNavigate } from "react-router-dom";
 const options = [
   { value: "Security", label: "Security" },
   { value: "Bootstrap", label: "Bootstrap" },
@@ -44,9 +46,29 @@ const AddPost = () => {
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
   const [selectedOption, setSelectedOption] = useState(null);
+  const [myInfo, setMyInfo] = useState({})
+const myPost = useMyPost()
+const navigate = useNavigate()
+
   const postedTime = new Date();
+  // profile info ------
+  useEffect(() => {
+    axiosPublic.get(`users?email=${user?.email}`)
+    .then(res => {
+      // console.log(res.data);
+      setMyInfo(res.data)
+    })
+  },[axiosPublic, user?.email])
+
+
+
   const handleAddPost = (e) => {
+    if(myInfo.role === 'member' && myPost.length >= 5){
+      toast('You can not more then 5 post without Membership!')
+      return  navigate('/membership')
+    }
     e.preventDefault();
+   
     const form = e.target;
     const authorName = form.authorName.value;
     const authorEmail = form.authorEmail.value;

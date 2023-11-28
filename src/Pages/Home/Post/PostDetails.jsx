@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiComment, BiDownvote, BiShare, BiUpvote } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import useAxiosPublic from "../../../Hooks/useAxios/useAxiosPublic";
@@ -15,25 +15,29 @@ import {
   EmailIcon,
 } from "react-share";
 import toast from "react-hot-toast";
+import useAuth from "../../../Hooks/useAuth/useAuth";
+
 
 const PostDetails = () => {
+  const {user} = useAuth()
   const axiosPublic = useAxiosPublic();
   const [post, setPost] = useState({});
   const { id } = useParams();
-  console.log(id);
-
+  // console.log(id);
+  const [comments, setComments] = useState([])
+// shared url --------
   const shareUrl = `http://localhost:5173/post/${id}`;
   const handleCopy = () => {
     navigator.clipboard.writeText(shareUrl);
     toast.success(`Link copied!`);
   };
-
+// get single post 
   useEffect(() => {
     axiosPublic.get(`single-post/${id}`).then((res) => {
       setPost(res.data);
       console.log(res.data);
     });
-  }, [id, axiosPublic]);
+  }, [axiosPublic, id]);
 
   const {
     _id,
@@ -48,6 +52,52 @@ const PostDetails = () => {
     downVote,
   } = post || {};
   const formattedDate = moment(postedTime).format("MMMM Do YYYY, h:mm:ss a");
+
+
+// comment focus -------
+  const commentInputRef = useRef(null);
+  const handleCommentClick = () => {
+    // Focus on the comment input field when the comment button is clicked
+    if (commentInputRef.current) {
+      commentInputRef.current.focus();
+    }
+  };
+
+// post a comment -------
+  const handleComment = (e) => {
+    e.preventDefault()
+    const form = e.target;
+    const comment = form.comment.value;
+    const commentData = {
+      postId: _id,
+      postTitle,
+      comment,
+      email:user?.email
+    }
+    axiosPublic.post(`comment`,commentData)
+    .then(res => {
+      console.log(res.data);
+      if(res.data.insertedId){
+        toast.success(`You Put a comment${comment}`)
+        axiosPublic.get(`comments?postId=${_id}`)
+  .then(res => {
+    console.log(res.data);
+    setComments(res.data)
+  })
+      }
+    })
+    console.log(commentData);
+  }
+
+  useEffect(() => {
+    axiosPublic.get(`comments?postId=${_id}`)
+    .then(res => {
+      console.log(res.data);
+      setComments(res.data)
+    })
+  } ,[axiosPublic,_id])
+
+
   return (
     <section>
       <div className="max-w-4xl mx-auto px-10 my-4 py-6 bg-white rounded-lg shadow-md">
@@ -87,8 +137,9 @@ const PostDetails = () => {
               <BiDownvote className="cursor-pointer inline" />
               {downVote}
             </button>
-
-            <BiComment className="cursor-pointer inline" />
+<button onClick={handleCommentClick}>
+<BiComment  className="cursor-pointer inline" />{comments?.length}
+</button>
 
             {/* The button to open modal */}
             <label htmlFor="my_modal_7" className="btn">
@@ -133,6 +184,37 @@ const PostDetails = () => {
             </div>
           </div>
         </div>
+      </div>
+      {/* comment area  */}
+      <div>
+      <form  onSubmit={handleComment} className="mb-5 max-w-4xl mx-auto ">
+           <div>
+           <label
+              htmlFor="comment"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Comment
+            </label>
+            <textarea
+             ref={commentInputRef}
+              name="comment"
+              type="text"
+              id="comment"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:gray-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-600 dark:shadow-sm-light"
+              placeholder=""
+              required
+            />
+           </div>
+           <button className="btn bg-slate-900 hover:bg-slate-800 text-white my-1 cursor-pointer">Comment</button>
+          </form>
+        <div className="max-w-4xl mx-auto">
+        <h3 className="text-slate-900">All Comments </h3>
+         {comments.length && comments.map(comment => <div key={comment._id} className=" border-2 p-4 my-5 hover:bg-slate-400">
+            <h3 className="font-medium ">{comment.postTitle}</h3>
+            <p>{comment.comment}</p>
+          </div>)}
+        </div>
+          
       </div>
     </section>
   );
