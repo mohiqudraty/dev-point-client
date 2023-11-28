@@ -3,7 +3,7 @@ import { Chart } from "react-google-charts";
   
 const PieChart = ({users, comments, posts}) => {
     const data = [
-        ["Task", "Hours per Day"],
+        ["Pie Chart", "Web Analytics"],
         ["Users", users],
         ["comments", comments],
         ["posts", posts],

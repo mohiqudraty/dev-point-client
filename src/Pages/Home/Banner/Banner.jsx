@@ -1,6 +1,6 @@
 const Banner = ({ handleSearch }) => {
   return (
-    <div
+    <div  data-aos="zoom-in"
       className="hero min-h-[500px]"
       style={{
         backgroundImage:

@@ -77,7 +77,7 @@ const Post = ({ post }) => {
 
   
   return (
-    <section className="my-5">
+    <section  data-aos="flip-left"  className="my-5">
       <div className="max-w-4xl mx-auto px-10 my-4 py-6 bg-slate-300 hover:border-2 border-slate-900 duration-500 ease-in rounded-lg shadow-md">
         <div className="flex justify-between items-center">
           <div>

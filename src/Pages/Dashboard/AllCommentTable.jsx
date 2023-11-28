@@ -12,6 +12,7 @@ const AllCommentTable = ({ comm }) => {
 
 
     const handleFeedback = (event) => {
+        event.preventDefault()
         const selectedFeedback = event.target.value;
         setIsReport(selectedFeedback !== '');
         setReport(selectedFeedback)

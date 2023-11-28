@@ -5,7 +5,7 @@ const MembershipCards = ({ p }) => {
   // console.log(Object.keys(p).join(","));
   const { type, img, price, features } = p;
   return (
-    <div className="w-full md:w-80 flex flex-col justify-center items-center space-y-5 mt-10 md:mt-4">
+    <div data-aos="zoom-in-down" className="w-full md:w-80 flex flex-col justify-center items-center space-y-5 mt-10 md:mt-4">
       <h2 className="text-3xl font-bold">{type}</h2>
       <img className="w-32" src={img} alt="" />
       <h2 className="text-2xl">

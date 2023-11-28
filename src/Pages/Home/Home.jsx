@@ -6,12 +6,15 @@ import Post from "./Post/Post";
 import useAxiosPublic from "../../Hooks/useAxios/useAxiosPublic";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useAnnouncement from "../../Api/useAnnouncement";
+import Announcement from "./Announcement";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
   const [searchedPost, setSearchedPost] = useState([]);
   const [sortedPost, setSortedPost] = useState([]);
   const { posts } = usePost();
+  const {announcement} = useAnnouncement()
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
@@ -57,7 +60,7 @@ const Home = () => {
   return (
     <div>
       {/*  Banner and Search Input */}
-      <Banner handleSearch={handleSearch} />
+      <Banner  handleSearch={handleSearch} />
 
       {/* Sort Button */}
       <div className="text-center">
@@ -99,7 +102,16 @@ const Home = () => {
       </div>
 
       {/* Announcement Section */}
-      <div></div>
+      {
+        announcement.length && <div className="max-w-3xl mx-auto text-center mt-8">
+        <h3 className="text-3xl font-semibold">All Announcement</h3>
+       
+{
+  announcement?.map(ann => <Announcement key={ann._id} ann={ann}></Announcement> )
+}
+       
+      </div>
+      }
     </div>
   );
 };

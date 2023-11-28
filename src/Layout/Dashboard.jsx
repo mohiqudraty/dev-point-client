@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { BiHome, BiPen, BiUserCircle } from "react-icons/bi";
-import { FaUser,  } from "react-icons/fa";
+import { FaUser, FaUsers,  } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 import useAxiosPublic from "../Hooks/useAxios/useAxiosPublic";
 import useAuth from "../Hooks/useAuth/useAuth";
+import { Announcement, Report } from "@mui/icons-material";
 
 const Dashboard = () => {
   const {user} = useAuth()
@@ -53,7 +54,31 @@ const Dashboard = () => {
           }
         >
           <span className="flex items-center gap-2">
-            <FaUser></FaUser> Manage Users
+            <FaUsers></FaUsers> Manage Users
+          </span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/dashboard/make-announcement"}
+          className={({ isActive, isPending }) =>
+            isActive ? "underline" : isPending ? "pending" : ""
+          }
+        >
+          <span className="flex items-center gap-2">
+            <Announcement></Announcement>Announcement
+          </span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/dashboard/reported-comments"}
+          className={({ isActive, isPending }) =>
+            isActive ? "underline" : isPending ? "pending" : ""
+          }
+        >
+          <span className="flex items-center gap-2">
+            <Report></Report>Reported Comments
           </span>
         </NavLink>
       </li>
@@ -103,7 +128,9 @@ const Dashboard = () => {
     </>
   );
   return (
-    <div className="flex">
+    <div data-aos="fade-down"
+    data-aos-easing="linear"
+    data-aos-duration="1500" className="flex">
       {/* sidebar  */}
       <div className="w-[20%] min-h-screen bg-slate-900">
         <h2 className="text-3xl font-black p-5 m-2 text-white border-2">
