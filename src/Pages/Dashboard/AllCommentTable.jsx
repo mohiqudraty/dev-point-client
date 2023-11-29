@@ -21,7 +21,9 @@ const AllCommentTable = ({ comm }) => {
     const handleReport = () => {
         const feedback = {
             reportId: _id,
-            report: report
+            report: report,
+            comment,
+            email,
         }
         axiosPublic.post('/report', feedback)
         .then(res => {

@@ -6,7 +6,7 @@ const useAnnouncement = () => {
   const { data: announcement = [] } = useQuery({
     queryKey: ["announcement"],
     queryFn: async () => {
-      const res = await axiosPublic.get("announcements");
+      const res = await axiosPublic.get("/announcements");
       return res.data;
     },
   });

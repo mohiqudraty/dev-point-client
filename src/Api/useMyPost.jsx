@@ -11,7 +11,7 @@ const useMyPost = () => {
     const { data: myPost = [], refetch } = useQuery({
       queryKey: ["all-post"],
       queryFn: async () => {
-        const res = await axiosPublic.get(`my-posts?email=${user?.email}`);
+        const res = await axiosPublic.get(`/my-posts?email=${user?.email}`);
         return res.data;
       },
     });

@@ -42,7 +42,7 @@ const Home = () => {
     e.preventDefault();
     const form = e.target;
     const tag = form.tag.value;
-    axiosPublic.get(`all-post?tag=${tag}`).then((res) => {
+    axiosPublic.get(`/all-post?tag=${tag}`).then((res) => {
       setSearchedPost(res.data);
       setSortedPost([]);
     });
@@ -50,7 +50,7 @@ const Home = () => {
 
   // sorted post by popularity -----------
   const handleSortedPost = () => {
-    axiosPublic.get("sorted-posts").then((res) => {
+    axiosPublic.get("/sorted-posts").then((res) => {
       setSortedPost(res.data);
       setSearchedPost([]);
       toast.success("Post Sorted By Popularity!");

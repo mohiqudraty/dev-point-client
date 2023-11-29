@@ -7,7 +7,7 @@ const useMembership = () => {
   const { data: plan = [] } = useQuery({
     queryKey: ["membership"],
     queryFn: async () => {
-      const res = await axiosPublic.get("membership");
+      const res = await axiosPublic.get("/membership");
       return res.data;
     },
   });

@@ -119,10 +119,10 @@ const NavBar = () => {
         }
       >
         <p className="text-slate-300 my-5">{user?.displayName}</p>
-        <Link to={"/dashboard"} className="font-bold">
+        <Link to={"/dashboard/my-profile"} className="font-bold">
           Dashboard
         </Link>
-        <button className="btn block mx-auto font-semibold">Sign Out</button>
+        <button onClick={handleSignOut} className="btn block mx-auto font-semibold">Sign Out</button>
       </div>
     </nav>
   );

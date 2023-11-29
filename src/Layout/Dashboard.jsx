@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   // profile info ------
   useEffect(() => {
-    axiosPublic.get(`users?email=${user?.email}`)
+    axiosPublic.get(`/users?email=${user?.email}`)
     .then(res => {
       // console.log(res.data);
       setMyInfo(res.data)

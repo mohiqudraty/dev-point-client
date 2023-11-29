@@ -1,4 +1,4 @@
-import toast from "react-hot-toast";
+
 import useAxiosPublic from "../../../Hooks/useAxios/useAxiosPublic";
 import useUsers from "../../../Api/useUsers";
 import Swal from "sweetalert2";
@@ -32,7 +32,7 @@ const handleAdmin = () => {
     .then(res => {
         console.log(res.data);
         if(res.data.modifiedCount > 0){
-            toast.success("")
+    
             swalWithBootstrapButtons.fire({
                 title: "Admin!",
                 text: "Make Admin Success!",

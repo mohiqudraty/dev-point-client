@@ -1,14 +1,31 @@
-import useComments from "../../../Api/useComments";
+import useReport from "../../../Api/useReport";
+import ReportTable from "./ReportTable";
+
 
 
 const ReportedComments = () => {
-    const {comments} = useComments()
+    const {reports} = useReport()
+    
     return (
         <div>
-            {
-                comments.map(com => <p key={com._id} > {com.comment}</p>)
-            }
-        </div>
+        <div className="overflow-x-auto">
+          <h2 className="text-center text-slate-900 font-semibold text-xl mt-10">My All Comment Report</h2>
+      <table className="table">
+        {/* head */}
+        <thead>
+          <tr>
+      <th>Comment</th>
+      <th>Report</th>
+      <th>Action</th>
+     
+          </tr>
+        </thead>
+        <tbody>
+       {reports?.length ? reports?.map(repo => <ReportTable key={repo._id} repo={repo}> </ReportTable>) : <p>No Report</p>}
+        </tbody>
+      </table>
+    </div>
+      </div>
     );
 };
 

@@ -4,10 +4,10 @@ import useAxiosSecure from "../Hooks/useAxios/useAxiosSecure";
 const useComments = () => {
   const axiosSecure = useAxiosSecure()
   // all post api
-  const { data: comments = [] } = useQuery({
+  const { data: comments = []} = useQuery({
     queryKey: ["comments"],
     queryFn: async () => {
-      const res = await axiosSecure.get("comments");
+      const res = await axiosSecure.get("/comments");
       return res.data;
     },
   });

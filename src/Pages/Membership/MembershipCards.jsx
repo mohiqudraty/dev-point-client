@@ -1,7 +1,11 @@
+
 import { MdOutlineDoneOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+
 const MembershipCards = ({ p }) => {
+
+
   // console.log(Object.keys(p).join(","));
   const { type, img, price, features } = p;
   return (
@@ -19,12 +23,11 @@ const MembershipCards = ({ p }) => {
           </p>
         ))}
       </div>
-
-      <Link className="btn bg-slate-800 font-semibold text-white btn-block hover:text-black">
-        {type === "Silver" ? "Plan Active" : "Buy Plan"}
-      </Link>
+        {type === "Silver" ? <button className="btn bg-white-800 font-semibold text-gray-700 outline btn-block " >Plan Active</button> : <Link className="btn bg-slate-800 font-semibold text-white btn-block hover:text-black" to={'/payment'}>Buy Plan</Link>}
+      
     </div>
   );
 };
+
 
 export default MembershipCards;
